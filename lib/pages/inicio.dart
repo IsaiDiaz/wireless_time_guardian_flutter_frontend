@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wireless_time_guardian_flutter_frontend/components/employes_table.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/page_title.dart';
 
 class Inicio extends StatelessWidget {
@@ -10,7 +11,9 @@ class Inicio extends StatelessWidget {
       children: [
         PageTitle(title: "Inicio"),
         SizedBox(height: 20),
-        Text("Bienvenido a Wireless Time Guardian"),
+        EmployesTable(),
+        SizedBox(height: 20),
+        EmployesTable()
       ],
     );
   }
