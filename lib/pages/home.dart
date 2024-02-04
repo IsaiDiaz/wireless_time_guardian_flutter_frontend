@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/page_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/menu.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/pages/default.dart';
+import 'package:wireless_time_guardian_flutter_frontend/pages/empleados.dart';
+import 'package:wireless_time_guardian_flutter_frontend/pages/inicio.dart';
+import 'package:wireless_time_guardian_flutter_frontend/pages/proyectos.dart';
+import 'package:wireless_time_guardian_flutter_frontend/pages/rfid.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -39,14 +44,14 @@ class HomePage extends StatelessWidget {
 Widget _buildPage(BuildContext context, int actualPage){
   switch(actualPage){
     case 0:
-      return const Text("Inicio");
+      return const Inicio();
     case 1:
-      return const Text("Proyectos");
+      return const Proyectos();
     case 2:
-      return const Text("Empleados");
+      return const Empleados();
     case 3:
-      return const Text("RFID");
+      return const RFID();
     default:
-      return const Text("Default");
+      return const Default();
   }
 }
