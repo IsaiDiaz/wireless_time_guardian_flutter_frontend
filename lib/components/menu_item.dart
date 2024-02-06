@@ -14,7 +14,7 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 10, bottom: 10),
+        margin: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: Colors.white,
@@ -23,12 +23,14 @@ class MenuItem extends StatelessWidget {
           child: TextButton(
             style: TextButton.styleFrom(
               padding: const EdgeInsets.only(
-                  top: 20, bottom: 20, left: 10, right: 10),
+                  top: 20, bottom: 20, left: 25, right: 10),
             ),
             onPressed: () {
               onPressed();
             },
-            child: Row(children: [
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
               Icon(icon),
               const SizedBox(width: 10),
               Text(title),
