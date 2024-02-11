@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/page_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/pages/home.dart';
 
 void main() {
-  runApp(BlocProvider(create: (context) => PageBloc(), child: const MainApp()));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<PageBloc>(
+          create: (context) => PageBloc(),
+        ),
+        BlocProvider(create: (context) => EmployeInitCubit())
+      ], 
+      child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {

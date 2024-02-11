@@ -14,25 +14,25 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PageBloc, PageState>(
-      builder: (context, state) {
-        return Scaffold(
-            body: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.green, Colors.blue])),
-          alignment: Alignment.center,
-          child: SafeArea(
-            minimum: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                const Menu(),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
+    return Scaffold(
+        body: Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.green, Colors.blue])),
+      alignment: Alignment.center,
+      child: SafeArea(
+        minimum: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            const Menu(),
+            const SizedBox(
+              width: 20,
+            ),
+            BlocBuilder<PageBloc, PageState>(
+              builder: (context, state) {
+                return Expanded(
                     child: Column(
                   children: [
                     PageTitle(title: _pagetitle(state.actualPage)),
@@ -45,13 +45,13 @@ class HomePage extends StatelessWidget {
                           child: _buildPage(context, state.actualPage)),
                     ),
                   ],
-                )),
-              ],
+                ));
+              },
             ),
-          ),
-        ));
-      },
-    );
+          ],
+        ),
+      ),
+    ));
   }
 }
 

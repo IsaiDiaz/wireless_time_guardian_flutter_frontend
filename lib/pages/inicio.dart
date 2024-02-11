@@ -5,12 +5,6 @@ class Inicio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        EmployesTable(),
-        SizedBox(height: 20),
-        EmployesTable()
-      ],
-    );
+    return const EmployesTable();
   }
 }

@@ -1,39 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 
 class EmployeInitState {
-  List<Map<String, dynamic>> employes = [
-    {
-      'nombre': 'Juan',
-      'apellido': 'Perez',
-      'dni': '12345678',
-      'email': '',
-      'telefono': '',
-      'proyecto': '',
-    },
-    {
-      'nombre': 'Pedro',
-      'apellido': 'Gomez',
-      'dni': '87654321',
-      'email': '',
-      'telefono': '',
-      'proyecto': '',
-    },
-  ];
+  final List<EmployeeDto> employes;
 
   EmployeInitState(this.employes);
 }
 
 class EmployeInitCubit extends Cubit<EmployeInitState> {
-  EmployeInitCubit() : super(EmployeInitState([]));
+  EmployeInitCubit() : super(EmployeInitState([
+   EmployeeDto(id: 1, fullName: "Juan Perez Perez", ci: "12334456", update: true, isPresentRfid: false, isPresentWifi: false),
+    EmployeeDto(id: 2, fullName: "Maria Perez Perez", ci: "12334456", update: true, isPresentRfid: false, isPresentWifi: false),
+  ]));
 
-  void addEmploye(Map<String, dynamic> employe) {
-    final List<Map<String, dynamic>> employes = state.employes;
+  void addEmploye(EmployeeDto employe) {
+    final List<EmployeeDto> employes = state.employes;
     employes.add(employe);
     emit(EmployeInitState(employes));
   }
 
   void removeEmploye(int index) {
-    final List<Map<String, dynamic>> employes = state.employes;
+    final List<EmployeeDto> employes = state.employes;
     employes.removeAt(index);
     emit(EmployeInitState(employes));
   }
