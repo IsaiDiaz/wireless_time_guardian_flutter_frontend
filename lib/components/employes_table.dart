@@ -1,11 +1,13 @@
+import 'package:elegant_notification/elegant_notification.dart';
+import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
-import 'package:wireless_time_guardian_flutter_frontend/dto/recived_message.dart';
 import 'dart:convert';
 
 class EmployesTable extends StatefulWidget {
@@ -19,8 +21,9 @@ class _EmployesTableState extends State<EmployesTable> {
   StompClient? client;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
+
     client = StompClient(
         config: StompConfig(
       url: 'ws://localhost:8080/ws',
@@ -36,22 +39,42 @@ class _EmployesTableState extends State<EmployesTable> {
   }
 
   void onConnectCallback(StompFrame connectFrame) {
-    print('Conectado');
     client?.subscribe(
-      destination: '/topic/greetings',
+      destination: '/topic/employees',
       headers: {},
       callback: (StompFrame frame) {
-        final body = json.decode(frame.body!);
-        final recivedMessage = RecivedMessage.fromJson(body);
-        print('Recibido: ${recivedMessage.content}');
+        final employeeJson = json.decode(frame.body!);
+        final employee = EmployeeDto.fromJson(employeeJson);
+        BlocProvider.of<EmployeInitCubit>(context).addEmploye(employee);
+
+        ElegantNotification(
+          icon: const Icon(
+            Icons.info_outlined,
+            color: Color.fromARGB(255, 95, 172, 97),
+          ),
+          description: Text(
+            'Se ha actualizado el estado de ${employee.fullName}',
+          ),
+          animation: AnimationType.fromRight,
+          position: Alignment.topRight,
+          autoDismiss: true,
+          title: const Text(
+            'Actualización de estado',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          toastDuration: const Duration(seconds: 3),
+        ).show(context);
       },
     );
   }
 
-  void sendMessage() {
+  void sendMessage(EmployeeDto employe) {
     client?.send(
-      destination: '/app/hello',
-      body: '{"name": "flutter"}',
+      destination: '/app/employees',
+      body: json.encode(employe.toJson()),
     );
   }
 
