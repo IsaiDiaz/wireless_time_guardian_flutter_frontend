@@ -48,6 +48,7 @@ class _EmployesTableState extends State<EmployesTable> {
         BlocProvider.of<EmployeInitCubit>(context).addEmploye(employee);
 
         ElegantNotification(
+          width: 350,
           icon: const Icon(
             Icons.info_outlined,
             color: Color.fromARGB(255, 95, 172, 97),
@@ -165,7 +166,8 @@ class _EmployesTableState extends State<EmployesTable> {
           TableCell(
             child: TextButton(
               onPressed: () {
-                BlocProvider.of<EmployeInitCubit>(context).removeEmploye(employes.indexOf(employe));
+                employe.update = !employe.update;
+                sendMessage(employe);
               },
               child: const Text('Cambiar estado'),
             ),
