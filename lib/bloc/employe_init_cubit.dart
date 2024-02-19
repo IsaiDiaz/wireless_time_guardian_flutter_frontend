@@ -46,4 +46,8 @@ class EmployeInitCubit extends Cubit<EmployeInitState> {
     employes[index] = employe;
     emit(EmployeInitState(employes));
   }
+
+  void initList(Future<List<EmployeeDto>> employes) {
+    employes.then((value) => emit(EmployeInitState(value)));
+  }
 }

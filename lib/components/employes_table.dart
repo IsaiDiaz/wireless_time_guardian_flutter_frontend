@@ -7,8 +7,11 @@ import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'dart:convert';
+
+import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
 
 class EmployesTable extends StatefulWidget {
   const EmployesTable({super.key});
@@ -18,15 +21,20 @@ class EmployesTable extends StatefulWidget {
 }
 
 class _EmployesTableState extends State<EmployesTable> {
+  late Future<List<EmployeeDto>> employes;
   StompClient? client;
 
   @override
   void initState(){
     super.initState();
 
+    _fetchEmployes();
+
+    String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
+
     client = StompClient(
         config: StompConfig(
-      url: 'ws://localhost:8080/ws',
+      url: 'ws://$serverIp:8080/ws',
       onConnect: onConnectCallback,
     ));
     client?.activate();
@@ -77,6 +85,12 @@ class _EmployesTableState extends State<EmployesTable> {
       destination: '/app/employees',
       body: json.encode(employe.toJson()),
     );
+  }
+
+  void _fetchEmployes() {
+    String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
+    employes = EmployeServices.getEmployesFromCurrentProject(serverIp);
+    BlocProvider.of<EmployeInitCubit>(context).initList(employes);
   }
 
   @override
