@@ -13,7 +13,6 @@ class ApplicationCubit extends Cubit<ApplicationState> {
   );
 
   void changeServerIp(String serverIp) {
-    print('changed server ip to $serverIp');
     emit(ApplicationState(serverIp, state.serverPort));
   }
 

@@ -1,7 +1,6 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
@@ -31,6 +30,7 @@ class _EmployesTableState extends State<EmployesTable> {
     _fetchEmployes();
 
     String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
+    print('ws://$serverIp:8080/ws');
 
     client = StompClient(
         config: StompConfig(
@@ -118,7 +118,7 @@ class _EmployesTableState extends State<EmployesTable> {
                     Text('Acciones', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
-                ..._buildEmployes(state.employes),
+                ..._buildEmployes(state.currentProjectEmployees),
               ],
             ),
             TextButton(onPressed: 

@@ -1,13 +1,13 @@
 class EmployeeDto{
 
-  int id;
+  int? id;
   String fullName;
   String ci;
   bool update;
   bool isPresentRfid;
   bool isPresentWifi;
 
-  EmployeeDto({required this.id, required this.fullName, required this.ci, required this.update, required this.isPresentRfid, required this.isPresentWifi});
+  EmployeeDto({this.id, required this.fullName, required this.ci, required this.update, required this.isPresentRfid, required this.isPresentWifi});
 
   factory EmployeeDto.fromJson(Map<String, dynamic> json) {
     return EmployeeDto(
