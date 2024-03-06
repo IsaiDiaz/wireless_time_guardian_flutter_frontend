@@ -2,6 +2,7 @@ import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_entity.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
@@ -73,7 +74,8 @@ class AddEmployeeForm extends StatelessWidget {
                       ),
                       toastDuration: const Duration(seconds: 3),
                     ).show(context);
-
+                    var actualizedEmployees = EmployeServices.getEmployesNotAssignedToCurrentProject(serverIp);
+                    BlocProvider.of<EmployeInitCubit>(context).initAllEmployeesList(actualizedEmployees);
                     Navigator.of(context).pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

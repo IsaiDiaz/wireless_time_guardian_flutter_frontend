@@ -30,7 +30,6 @@ class _EmployesTableState extends State<EmployesTable> {
     _fetchEmployes();
 
     String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
-    print('ws://$serverIp:8080/ws');
 
     client = StompClient(
         config: StompConfig(
@@ -98,42 +97,25 @@ class _EmployesTableState extends State<EmployesTable> {
     return BlocBuilder<EmployeInitCubit, EmployeInitState>(
         builder: (context, state) {
       return Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(20),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Column(
+        child: Table( 
           children: [
-            Table(
+            const TableRow(
               children: [
-                const TableRow(
-                  children: [
-                    Text('Nombre', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('CI', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Estado', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('RFID', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Wifi', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Acciones', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                ..._buildEmployes(state.currentProjectEmployees),
+                Text('Nombre', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('CI', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Estado', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('RFID', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Wifi', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Acciones', style: TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
-            TextButton(onPressed: 
-            (){
-              //harcoded add employee
-              BlocProvider.of<EmployeInitCubit>(context).addEmploye(EmployeeDto(
-                id: 99,
-                fullName: 'Juan Perez',
-                ci: '1234567',
-                update: true,
-                isPresentRfid: true,
-                isPresentWifi: true,
-              ));
-            }
-            , child: const Text('Agregar Empleado'))
+            ..._buildEmployes(state.currentProjectEmployees),
           ],
         )
       );
@@ -154,36 +136,54 @@ class _EmployesTableState extends State<EmployesTable> {
         ),
         children: [
           TableCell(
-            child: Text(employe.fullName),
-          ),
-          TableCell(
-            child: Text(employe.ci),
-          ),
-          TableCell(
-            child: Text(
-              employe.update ? 'Activo' : 'Inactivo',
-              style: TextStyle(color: employe.update ? Colors.green : Colors.red),
-              ),
-          ),
-          TableCell(
-            child: Text(
-              employe.isPresentRfid ? 'Presente' : 'Ausente',
-              style: TextStyle(color: employe.isPresentRfid ? Colors.green : Colors.red),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(employe.fullName),
             ),
           ),
           TableCell(
-            child: Text(
-              employe.isPresentWifi ? 'Presente' : 'Ausente',
-              style: TextStyle(color: employe.isPresentWifi ? Colors.green : Colors.red),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(employe.ci),
+            ),
           ),
           TableCell(
-            child: TextButton(
-              onPressed: () {
-                employe.update = !employe.update;
-                sendMessage(employe);
-              },
-              child: const Text('Cambiar estado'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                employe.update ? 'Activo' : 'Inactivo',
+                style: TextStyle(color: employe.update ? Colors.green : Colors.red),
+                ),
+            ),
+          ),
+          TableCell(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                employe.isPresentRfid ? 'Presente' : 'Ausente',
+                style: TextStyle(color: employe.isPresentRfid ? Colors.green : Colors.red),
+              ),
+            ),
+          ),
+          TableCell(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                employe.isPresentWifi ? 'Presente' : 'Ausente',
+                style: TextStyle(color: employe.isPresentWifi ? Colors.green : Colors.red),
+                ),
+            ),
+          ),
+          TableCell(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                onPressed: () {
+                  employe.update = !employe.update;
+                  sendMessage(employe);
+                },
+                child: const Text('Cambiar estado'),
+              ),
             ),
           ),
         ],

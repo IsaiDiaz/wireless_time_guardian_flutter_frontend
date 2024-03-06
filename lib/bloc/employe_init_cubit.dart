@@ -54,6 +54,14 @@ class EmployeInitCubit extends Cubit<EmployeInitState> {
     emit(EmployeInitState(currentProjectEmployees, state.allEmployees));
   }
 
+  void updateAllEmployeesEmployee(EmployeeDto employe) {
+    final List<EmployeeDto> allEmployees = state.allEmployees;
+    final int index =
+        allEmployees.indexWhere((element) => element.id == employe.id);
+    allEmployees[index] = employe;
+    emit(EmployeInitState(state.currentProjectEmployees, allEmployees));
+  }
+
   void initList(Future<List<EmployeeDto>> currentProjectEmployees) {
     currentProjectEmployees
         .then((value) => emit(EmployeInitState(value, state.allEmployees)));
@@ -66,6 +74,16 @@ class EmployeInitCubit extends Cubit<EmployeInitState> {
 
   void deleteNooneEmployee(){
     state.allEmployees.removeWhere((element) => element.fullName == "NADIE");
+    emit(EmployeInitState(state.currentProjectEmployees, state.allEmployees));
+  }
+
+  void deleteEmployee(EmployeeDto employee){
+    state.currentProjectEmployees.remove(employee);
+    emit(EmployeInitState(state.currentProjectEmployees, state.allEmployees));
+  }
+
+  void deleteAllEmployeesEmployee(EmployeeDto employee){
+    state.allEmployees.remove(employee);
     emit(EmployeInitState(state.currentProjectEmployees, state.allEmployees));
   }
 }
