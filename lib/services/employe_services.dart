@@ -114,7 +114,17 @@ class EmployeServices {
     }
   }
 
+  static Future<List<EmployeeDto>> getEmployeesByProject(String serverIp, int projectId) async {
+    final response = await http.get(Uri.parse('http://$serverIp:8080/api/v1/employe/project/$projectId'));
+    if (response.statusCode == 200) {
+      final jsonResponse = convert.jsonDecode(response.body);
+      final responseDto = ResponseDto.fromJson(jsonResponse);
+      final List<dynamic> dataList = responseDto.data;
+      final List<EmployeeDto> employees = dataList.map((e) => EmployeeDto.fromJson(e)).toList();
+      return employees;
+    } else {
+      throw Exception('Failed to load employes');
+    }
+  }
 
-
-  
 }

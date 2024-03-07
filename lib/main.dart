@@ -3,17 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/page_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/project_cubit.dart';
+import 'package:wireless_time_guardian_flutter_frontend/dto/project_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/pages/home.dart';
+import 'package:wireless_time_guardian_flutter_frontend/services/project_service.dart';
 
 void main() {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<PageBloc>(
-          create: (context) => PageBloc(),
-        ),
+        BlocProvider(create: (context) => PageBloc()),
         BlocProvider(create: (context) => EmployeInitCubit()),
-        BlocProvider(create: (context) => ApplicationCubit())
+        BlocProvider(create: (context) => ApplicationCubit()),
+        BlocProvider(create: (context) => ProjectCubit())
       ], 
       child: const MainApp()));
 }
@@ -23,6 +25,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
+    Future<ProjectDto> currentProject = ProjectService.getCurrentProject(serverIp);
+    currentProject.then((value) => 
+       BlocProvider.of<ProjectCubit>(context).setCurrentProject(value)
+    );
+    
+
     return MaterialApp(
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

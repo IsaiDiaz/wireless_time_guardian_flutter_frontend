@@ -137,19 +137,19 @@ class _EmployesTableState extends State<EmployesTable> {
         children: [
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: Text(employe.fullName),
             ),
           ),
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: Text(employe.ci),
             ),
           ),
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: Text(
                 employe.update ? 'Activo' : 'Inactivo',
                 style: TextStyle(color: employe.update ? Colors.green : Colors.red),
@@ -158,7 +158,7 @@ class _EmployesTableState extends State<EmployesTable> {
           ),
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: Text(
                 employe.isPresentRfid ? 'Presente' : 'Ausente',
                 style: TextStyle(color: employe.isPresentRfid ? Colors.green : Colors.red),
@@ -167,7 +167,7 @@ class _EmployesTableState extends State<EmployesTable> {
           ),
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: Text(
                 employe.isPresentWifi ? 'Presente' : 'Ausente',
                 style: TextStyle(color: employe.isPresentWifi ? Colors.green : Colors.red),
@@ -176,8 +176,11 @@ class _EmployesTableState extends State<EmployesTable> {
           ),
           TableCell(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
               child: TextButton(
+                style: TextButton.styleFrom(
+                  alignment: Alignment.centerLeft,
+                  ),
                 onPressed: () {
                   employe.update = !employe.update;
                   sendMessage(employe);

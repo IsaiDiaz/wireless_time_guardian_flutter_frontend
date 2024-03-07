@@ -18,8 +18,8 @@ class ProjectDto{
     return ProjectDto(
       projectId: json['projectId'],
       projectName: json['projectName'],
-      projectInitialDate: DateTime.parse(json['projectInitialDate']),
-      projectFinalDate: json['projectFinalDate'] != null ? DateTime.parse(json['projectFinalDate']) : null,
+      projectInitialDate: DateTime.fromMillisecondsSinceEpoch(json['projectInitialDate'], isUtc: true),
+      projectFinalDate: json['projectFinalDate'] != null ? DateTime.fromMillisecondsSinceEpoch(json['projectFinalDate'], isUtc: true) : null,
       projectIsCurrent: json['projectIsCurrent']
     );
   }
