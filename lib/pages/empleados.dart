@@ -17,32 +17,32 @@ class Empleados extends StatelessWidget {
         IconButton(
           tooltip: "Agregar nuevo empleado",
           iconSize: 40,
-          onPressed:(){
+          onPressed: () {
             showDialog(
-              context: context, 
-              builder: (BuildContext context){
-                return AlertDialog(
-                  contentPadding: const EdgeInsets.all(0),
-                  content: IntrinsicHeight(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: AddEmployeeForm()
-                      ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      }, 
-                      child: const Text("Cerrar")
-                    )
-                  ],
-                );
-              }
-            );
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    contentPadding: const EdgeInsets.all(0),
+                    content: IntrinsicHeight(
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: AddEmployeeForm()),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cerrar"))
+                    ],
+                  );
+                });
           },
-         icon: const Icon(Icons.add_circle, color: Colors.white,),
-         )
+          icon: const Icon(
+            Icons.add_circle,
+            color: Colors.white,
+          ),
+        )
       ],
     );
   }

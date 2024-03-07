@@ -1,3 +1,4 @@
+import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/project_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/project_employees_dto.dart';
@@ -19,7 +20,11 @@ class ProjectState {
 }
 
 class ProjectCubit extends Cubit<ProjectState> {
-  ProjectCubit() : super(ProjectState());
+  ProjectCubit() : super(ProjectState(
+    projects: [],
+    currentProject: null,
+    projectEmployees: [],
+  ));
 
   void initProjects(List<ProjectDto> projects) {
     emit(state.copyWith(projects: projects));
@@ -30,6 +35,14 @@ class ProjectCubit extends Cubit<ProjectState> {
   }
 
   void addProject(ProjectDto project) {
+    if (state.projects == null) {
+      emit(state.copyWith(projects: [project]));
+      return;
+    }else{
+      if (state.projects!.any((p) => p.projectId == project.projectId)) {
+        return;
+      }
+    }
     emit(state.copyWith(projects: [...state.projects!, project]));
   }
 
@@ -48,5 +61,24 @@ class ProjectCubit extends Cubit<ProjectState> {
   void deleteProjectEmployee(int projectId) {
     emit(state.copyWith(projectEmployees: state.projectEmployees!.where((pe) => pe.projectId != projectId).toList()));
   }
+
+  void addEmployeeToProject(int projectId, EmployeeDto employee) {
+    List<ProjectEmployeesDto> projectEmployees = state.projectEmployees!;
+    ProjectEmployeesDto projectEmployee = projectEmployees.firstWhere((pe) => pe.projectId == projectId);
+    projectEmployee.employees.add(employee);
+    emit(state.copyWith(projectEmployees: projectEmployees));
+  }
+
+  void deleteEmployeeFromProject(int projectId, int employeeId) {
+    List<ProjectEmployeesDto> projectEmployees = state.projectEmployees!;
+    ProjectEmployeesDto projectEmployee = projectEmployees.firstWhere((pe) => pe.projectId == projectId);
+    projectEmployee.employees.removeWhere((e) => e.id == employeeId);
+    emit(state.copyWith(projectEmployees: projectEmployees));
+  }
+
+  List<EmployeeDto> getProjectEmployees(int projectId) {
+    return state.projectEmployees!.firstWhere((pe) => pe.projectId == projectId).employees;
+  }
+
 }
 
