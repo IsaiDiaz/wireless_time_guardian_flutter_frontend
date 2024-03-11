@@ -10,7 +10,10 @@ class ProjectState {
 
   ProjectState({this.projects, this.currentProject, this.projectEmployees});
 
-  ProjectState copyWith({List<ProjectDto>? projects, ProjectDto? currentProject, List<ProjectEmployeesDto>? projectEmployees}) {
+  ProjectState copyWith(
+      {List<ProjectDto>? projects,
+      ProjectDto? currentProject,
+      List<ProjectEmployeesDto>? projectEmployees}) {
     return ProjectState(
       projects: projects ?? this.projects,
       currentProject: currentProject ?? this.currentProject,
@@ -20,11 +23,12 @@ class ProjectState {
 }
 
 class ProjectCubit extends Cubit<ProjectState> {
-  ProjectCubit() : super(ProjectState(
-    projects: [],
-    currentProject: null,
-    projectEmployees: [],
-  ));
+  ProjectCubit()
+      : super(ProjectState(
+          projects: [],
+          currentProject: null,
+          projectEmployees: [],
+        ));
 
   void initProjects(List<ProjectDto> projects) {
     emit(state.copyWith(projects: projects));
@@ -38,7 +42,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     if (state.projects == null) {
       emit(state.copyWith(projects: [project]));
       return;
-    }else{
+    } else {
       if (state.projects!.any((p) => p.projectId == project.projectId)) {
         return;
       }
@@ -47,7 +51,9 @@ class ProjectCubit extends Cubit<ProjectState> {
   }
 
   void deleteProject(int projectId) {
-    emit(state.copyWith(projects: state.projects!.where((p) => p.projectId != projectId).toList()));
+    emit(state.copyWith(
+        projects:
+            state.projects!.where((p) => p.projectId != projectId).toList()));
   }
 
   void initProjectEmployees(List<ProjectEmployeesDto> projectEmployees) {
@@ -55,30 +61,48 @@ class ProjectCubit extends Cubit<ProjectState> {
   }
 
   void addProjectEmployee(ProjectEmployeesDto projectEmployee) {
-    emit(state.copyWith(projectEmployees: [...state.projectEmployees!, projectEmployee]));
+    emit(state.copyWith(
+        projectEmployees: [...state.projectEmployees!, projectEmployee]));
   }
 
   void deleteProjectEmployee(int projectId) {
-    emit(state.copyWith(projectEmployees: state.projectEmployees!.where((pe) => pe.projectId != projectId).toList()));
+    emit(state.copyWith(
+        projectEmployees: state.projectEmployees!
+            .where((pe) => pe.projectId != projectId)
+            .toList()));
   }
 
   void addEmployeeToProject(int projectId, EmployeeDto employee) {
     List<ProjectEmployeesDto> projectEmployees = state.projectEmployees!;
-    ProjectEmployeesDto projectEmployee = projectEmployees.firstWhere((pe) => pe.projectId == projectId);
+    ProjectEmployeesDto projectEmployee =
+        projectEmployees.firstWhere((pe) => pe.projectId == projectId);
     projectEmployee.employees.add(employee);
     emit(state.copyWith(projectEmployees: projectEmployees));
   }
 
   void deleteEmployeeFromProject(int projectId, int employeeId) {
     List<ProjectEmployeesDto> projectEmployees = state.projectEmployees!;
-    ProjectEmployeesDto projectEmployee = projectEmployees.firstWhere((pe) => pe.projectId == projectId);
+    ProjectEmployeesDto projectEmployee =
+        projectEmployees.firstWhere((pe) => pe.projectId == projectId);
     projectEmployee.employees.removeWhere((e) => e.id == employeeId);
     emit(state.copyWith(projectEmployees: projectEmployees));
   }
 
   List<EmployeeDto> getProjectEmployees(int projectId) {
-    return state.projectEmployees!.firstWhere((pe) => pe.projectId == projectId).employees;
+    return state.projectEmployees!
+        .firstWhere((pe) => pe.projectId == projectId)
+        .employees;
   }
 
+  void updateProject(ProjectDto project) {
+    if (state.currentProject != null &&
+        state.currentProject!.projectId == project.projectId) {
+      emit(state.copyWith(currentProject: project));
+    } else {
+      List<ProjectDto> projects = state.projects!;
+      int index = projects.indexWhere((p) => p.projectId == project.projectId);
+      projects[index] = project;
+      emit(state.copyWith(projects: projects));
+    }
+  }
 }
-

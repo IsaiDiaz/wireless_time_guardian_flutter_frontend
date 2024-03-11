@@ -28,9 +28,11 @@ class ProjectEmployees extends StatelessWidget {
                     title: Text(employees[index].fullName),
                     subtitle: Text(employees[index].ci),
                     onLongPress: () {
-                      EmployeServices.deleteEmployeeFromProject(serverIp, employees[index].id!, projectId);
-                      BlocProvider.of<ProjectCubit>(context).deleteEmployeeFromProject(projectId, employees[index].id!);
-                      print("Empleado eliminado del proyecto");
+                      EmployeServices.deleteEmployeeFromProject(
+                          serverIp, employees[index].id!, projectId);
+                      BlocProvider.of<ProjectCubit>(context)
+                          .deleteEmployeeFromProject(
+                              projectId, employees[index].id!);
                     },
                   );
                 },

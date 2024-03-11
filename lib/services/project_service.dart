@@ -56,4 +56,51 @@ class ProjectService{
     }
   }
 
+  static Future<ProjectDto> updateCurrentProject(String serverIp, int projectId) async {
+    final response = await http.put(
+      Uri.parse('http://$serverIp:8080/api/v1/project/current/$projectId'),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = convert.jsonDecode(response.body);
+      final responseDto = ResponseDto.fromJson(jsonResponse);
+      final projectDto = ProjectDto.fromJson(responseDto.data);
+      return projectDto;
+    } else {
+      throw Exception('Failed to update current project');
+    }
+  }
+
+  //make a project inactive
+  static Future<ProjectDto> updateProjectState(String serverIp, int projectId) async {
+    final response = await http.put(
+      Uri.parse('http://$serverIp:8080/api/v1/project/not_current/$projectId'),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = convert.jsonDecode(response.body);
+      final responseDto = ResponseDto.fromJson(jsonResponse);
+      final projectDto = ProjectDto.fromJson(responseDto.data);
+      return projectDto;
+    } else {
+      throw Exception('Failed to update project');
+    }
+  } 
+
+  static Future<ProjectDto> updateProject(String serverIp, ProjectDto projectDto) async {
+    final response = await http.put(
+      Uri.parse('http://$serverIp:8080/api/v1/project'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: convert.jsonEncode(projectDto.toJson()),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = convert.jsonDecode(response.body);
+      final responseDto = ResponseDto.fromJson(jsonResponse);
+      final projectDto = ProjectDto.fromJson(responseDto.data);
+      return projectDto;
+    } else {
+      throw Exception('Failed to update project');
+    }
+  }
+
 }

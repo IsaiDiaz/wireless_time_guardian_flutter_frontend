@@ -28,8 +28,8 @@ class ProjectDto{
     return {
       'projectId': projectId,
       'projectName': projectName,
-      'projectInitialDate': projectInitialDate.toIso8601String(),
-      'projectFinalDate': projectFinalDate?.toIso8601String(),
+      'projectInitialDate': projectInitialDate.toUtc().millisecondsSinceEpoch,
+      'projectFinalDate': projectFinalDate?.toUtc().millisecondsSinceEpoch,
       'projectIsCurrent': projectIsCurrent
     };
   }
