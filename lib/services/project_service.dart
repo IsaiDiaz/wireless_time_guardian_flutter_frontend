@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:wireless_time_guardian_flutter_frontend/dto/employee_advance_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/project_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/response_dto.dart';
 
@@ -100,6 +101,24 @@ class ProjectService{
       return projectDto;
     } else {
       throw Exception('Failed to update project');
+    }
+  }
+
+  static Future<EmployeeAdvanceDto> postEmployeeAdvancePayment(String serverIp, int projectId, int employeeId, EmployeeAdvanceDto employeeAdvanceDto) async {
+    final response = await http.post(
+      Uri.parse('http://$serverIp:8080/api/v1/project/$projectId/employee/$employeeId/advance'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: convert.jsonEncode(employeeAdvanceDto.toJson()),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = convert.jsonDecode(response.body);
+      final responseDto = ResponseDto.fromJson(jsonResponse);
+      final employeeAdvanceDto = EmployeeAdvanceDto.fromJson(responseDto.data);
+      return employeeAdvanceDto;
+    } else {
+      throw Exception('Failed to create employee advance');
     }
   }
 

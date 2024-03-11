@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/project_cubit.dart';
+import 'package:wireless_time_guardian_flutter_frontend/components/add_employee_advance_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
 
@@ -33,6 +34,12 @@ class ProjectEmployees extends StatelessWidget {
                       BlocProvider.of<ProjectCubit>(context)
                           .deleteEmployeeFromProject(
                               projectId, employees[index].id!);
+                    },
+                    onTap: () {
+                      showDialog(context: context, 
+                      builder: (BuildContext context) {
+                        return AddEmployeeAdvanceForm(projectId, employees[index].id!);
+                      });
                     },
                   );
                 },

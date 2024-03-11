@@ -4,6 +4,7 @@ import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application
 import 'package:wireless_time_guardian_flutter_frontend/bloc/project_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/add_employee_to_project_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/edit_project_form.dart';
+import 'package:wireless_time_guardian_flutter_frontend/components/finalize_project_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/project_employees.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/project_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/project_service.dart';
@@ -97,22 +98,52 @@ class ProjectCard extends StatelessWidget {
           ),
           children: [
             ProjectEmployees(projectId: project.projectId!),
-            TextButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AddEmployeeToProjectForm(
-                            projectId: project.projectId!);
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AddEmployeeToProjectForm(
+                                projectId: project.projectId!);
+                          });
+                    },
+                    child: const Text('Agregar un empleado')),
+                TextButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EditProjectForm(project: project);
+                          });
+                    },
+                    child: const Text('Editar proyecto')),
+                TextButton(
+                  onPressed: () {
+                    if (project.projectFinalDate == null) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EditProjectFinalDateForm(project: project);
+                          });
+                    } else {
+                      project.projectFinalDate = null;
+                      Future<ProjectDto> updatedProject =
+                          ProjectService.updateProject(serverIp, project);
+                      updatedProject.then((value) {
+                        BlocProvider.of<ProjectCubit>(context)
+                            .updateProject(value);
                       });
-                },
-                child: const Text('Agregar un empleado')),
-            TextButton(onPressed: (){
-              showDialog(context: context, 
-              builder: (BuildContext context) {
-                return EditProjectForm(project: project);
-              });
-            }, child: const Text('Editar proyecto')),
+                    }
+                  },
+                  child: Text(project.projectFinalDate == null
+                      ? 'Finalizar proyecto'
+                      : 'Reactivar proyecto'),
+                ),
+              ],
+            ),
             Text(
               'Fecha de inicio: ${project.projectInitialDate.toIso8601String().split('T')[0]}',
               style: const TextStyle(
@@ -121,7 +152,7 @@ class ProjectCard extends StatelessWidget {
               ),
             ),
             Text(
-              'Fecha de fin: ${project.projectFinalDate ?? 'Proyecto no finalizado'}',
+              'Fecha de fin: ${project.projectFinalDate == null ? 'Proyecto no finalizado' : project.projectFinalDate!.toIso8601String().split('T')[0]}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
