@@ -21,7 +21,6 @@ class _AddEmployeeAdvanceFormState extends State<AddEmployeeAdvanceForm> {
 
   @override
   Widget build(BuildContext context) {
-    String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
     return AlertDialog(
       title: const Text('Crear adelanto del empleado'),
       content: IntrinsicHeight(

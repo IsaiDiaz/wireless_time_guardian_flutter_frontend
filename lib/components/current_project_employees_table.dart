@@ -85,7 +85,7 @@ class CurrentProjectEmployeesTable extends StatelessWidget {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: Text('No hay empleados en el proyecto actual'),
           );
         }
       },

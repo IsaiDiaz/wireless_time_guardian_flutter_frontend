@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
 
-    Future<ProjectDto> currentProject =
+    Future<ProjectDto?> currentProject =
         ProjectService.getCurrentProject(serverIp);
     currentProject.then((value) =>
         BlocProvider.of<ProjectCubit>(context).setCurrentProject(value));
@@ -38,11 +38,11 @@ class MainApp extends StatelessWidget {
     projects.then(
         (value) => BlocProvider.of<ProjectCubit>(context).initProjects(value));
 
-    Future<List<EmployeeDto>> currentEmployees =
+    Future<List<EmployeeDto>?> currentEmployees =
         EmployeServices.getEmployesFromCurrentProject(serverIp);
     BlocProvider.of<EmployeInitCubit>(context).initList(currentEmployees);
 
-    Future<List<EmployeeDto>> allEmployees =
+    Future<List<EmployeeDto>?> allEmployees =
         EmployeServices.getEmployesNotAssignedToCurrentProject(serverIp);
     BlocProvider.of<EmployeInitCubit>(context)
         .initAllEmployeesList(allEmployees);

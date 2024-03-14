@@ -10,8 +10,6 @@ import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'dart:convert';
 
-import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
-
 class EmployesTable extends StatefulWidget {
   const EmployesTable({super.key});
 
@@ -26,8 +24,6 @@ class _EmployesTableState extends State<EmployesTable> {
   @override
   void initState(){
     super.initState();
-
-    _fetchEmployes();
 
     String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
 
@@ -86,12 +82,6 @@ class _EmployesTableState extends State<EmployesTable> {
     );
   }
 
-  void _fetchEmployes() {
-    String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
-    employes = EmployeServices.getEmployesFromCurrentProject(serverIp);
-    BlocProvider.of<EmployeInitCubit>(context).initList(employes);
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EmployeInitCubit, EmployeInitState>(
@@ -115,6 +105,7 @@ class _EmployesTableState extends State<EmployesTable> {
                 Text('Acciones', style: TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
+            if (state.currentProjectEmployees.isNotEmpty)
             ..._buildEmployes(state.currentProjectEmployees),
           ],
         )

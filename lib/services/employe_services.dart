@@ -7,7 +7,7 @@ import 'package:wireless_time_guardian_flutter_frontend/dto/response_dto.dart';
 
 class EmployeServices {
   /// Get all employes for current project
-  static Future<List<EmployeeDto>> getEmployesFromCurrentProject(
+  static Future<List<EmployeeDto>?> getEmployesFromCurrentProject(
       String serverIp) async {
     final response = await http
         .get(Uri.parse('http://$serverIp:8080/api/v1/employe/current_project'));
@@ -18,13 +18,12 @@ class EmployeServices {
       final List<EmployeeDto> employees =
           dataList.map((e) => EmployeeDto.fromJson(e)).toList();
       return employees;
-    } else {
-      throw Exception('Failed to load employes');
-    }
+    } 
+    return null;
   }
 
   /// Post a new employe
-  static Future<bool> postEmploye(
+  static Future<EmployeeDto> postEmploye(
       String serverIp, EmployeeEntity employe) async {
     final response = await http.post(
       Uri.parse('http://$serverIp:8080/api/v1/employe'),
@@ -37,13 +36,13 @@ class EmployeServices {
       final jsonResponse = convert.jsonDecode(response.body);
       final responseDto = ResponseDto.fromJson(jsonResponse);
       final responseData = responseDto.data;
-      return responseData;
+      return EmployeeDto.fromJson(responseData);
     } else {
       throw Exception('Failed to create employe');
     }
   }
 
-  static Future<List<EmployeeDto>> getEmployesNotAssignedToCurrentProject(
+  static Future<List<EmployeeDto>?> getEmployesNotAssignedToCurrentProject(
       String serverIp) async {
     final response = await http.get(Uri.parse(
         'http://$serverIp:8080/api/v1/employe/not_assigned_to_current_project'));
@@ -54,9 +53,8 @@ class EmployeServices {
       final List<EmployeeDto> employees =
           dataList.map((e) => EmployeeDto.fromJson(e)).toList();
       return employees;
-    } else {
-      throw Exception('Failed to load employes');
-    }
+    } 
+    return null;
   }
 
   static Future<EmployeeDto> updateEmployee(

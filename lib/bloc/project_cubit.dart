@@ -20,6 +20,11 @@ class ProjectState {
       projectEmployees: projectEmployees ?? this.projectEmployees,
     );
   }
+
+  @override
+  String toString() {
+    return 'ProjectState{projects: $projects, currentProject: $currentProject, projectEmployees: $projectEmployees}';
+  }
 }
 
 class ProjectCubit extends Cubit<ProjectState> {
@@ -34,20 +39,31 @@ class ProjectCubit extends Cubit<ProjectState> {
     emit(state.copyWith(projects: projects));
   }
 
-  void setCurrentProject(ProjectDto project) {
-    emit(state.copyWith(currentProject: project));
+  void setCurrentProject(ProjectDto? project) {
+    if (project == null) {
+      emit(ProjectState(
+          projects: state.projects, currentProject: null, projectEmployees: state.projectEmployees
+      ));
+      return;
+    }else{
+      emit(state.copyWith(currentProject: project));
+    }
   }
 
   void addProject(ProjectDto project) {
     if (state.projects == null) {
       emit(state.copyWith(projects: [project]));
-      return;
     } else {
       if (state.projects!.any((p) => p.projectId == project.projectId)) {
+        // Update project
+        List<ProjectDto> projects = state.projects!;
+        int index = projects.indexWhere((p) => p.projectId == project.projectId);
+        projects[index] = project;
+        emit(state.copyWith(projects: projects));
         return;
       }
+      emit(state.copyWith(projects: [...state.projects!, project]));
     }
-    emit(state.copyWith(projects: [...state.projects!, project]));
   }
 
   void deleteProject(int projectId) {
@@ -88,7 +104,10 @@ class ProjectCubit extends Cubit<ProjectState> {
     emit(state.copyWith(projectEmployees: projectEmployees));
   }
 
-  List<EmployeeDto> getProjectEmployees(int projectId) {
+  List<EmployeeDto>? getProjectEmployees(int projectId) {
+    if (state.projectEmployees == null) {
+      return null;
+    }
     return state.projectEmployees!
         .firstWhere((pe) => pe.projectId == projectId)
         .employees;

@@ -14,12 +14,14 @@ class ProjectEmployees extends StatelessWidget {
   Widget build(BuildContext context) {
     //Search employees for the projectId
     String serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
-    List<EmployeeDto> employees =
+    List<EmployeeDto>? employees =
         BlocProvider.of<ProjectCubit>(context).getProjectEmployees(projectId);
     return Column(
       children: [
         const Text('Empleados'),
-        employees.isEmpty
+        if (employees == null)
+        const Text('No hay empleados asignados a este proyecto'),
+        employees!.isEmpty
             ? const Text('No hay empleados asignados a este proyecto')
             : ListView.builder(
                 shrinkWrap: true,

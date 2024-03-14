@@ -62,14 +62,42 @@ class EmployeInitCubit extends Cubit<EmployeInitState> {
     emit(EmployeInitState(state.currentProjectEmployees, allEmployees));
   }
 
-  void initList(Future<List<EmployeeDto>> currentProjectEmployees) {
+  void initList(Future<List<EmployeeDto>?> currentProjectEmployees) {
     currentProjectEmployees
-        .then((value) => emit(EmployeInitState(value, state.allEmployees)));
+        .then((value) {
+          if (value != null) {
+            emit(EmployeInitState(value, state.allEmployees));
+          }else{
+            emit(EmployeInitState([], state.allEmployees));
+          }
+        });
   }
 
-  void initAllEmployeesList(Future<List<EmployeeDto>> allEmployees) {
-    allEmployees.then((value) =>
-        emit(EmployeInitState(state.currentProjectEmployees, value)));
+  void initAllEmployeesList(Future<List<EmployeeDto>?> allEmployees) {
+    allEmployees.then((value) 
+        {
+          if (value != null) {
+            emit(EmployeInitState(state.currentProjectEmployees, value));
+          }else{
+            emit(EmployeInitState(state.currentProjectEmployees, []));
+          }
+        });
+  }
+
+  void addAllEmploye(EmployeeDto employe) {
+    if (existAllEmployeeById(employe.id!)) {
+      updateAllEmployeesEmployee(employe);
+    } else {
+      final List<EmployeeDto> allEmployees = state.allEmployees;
+      allEmployees.add(employe);
+      emit(EmployeInitState(state.currentProjectEmployees, allEmployees));
+    }
+  }
+
+  bool existAllEmployeeById(int id) {
+    final List<EmployeeDto> allEmployees = state.allEmployees;
+    final bool exist = allEmployees.any((element) => element.id == id);
+    return exist;
   }
 
   void deleteNooneEmployee(){

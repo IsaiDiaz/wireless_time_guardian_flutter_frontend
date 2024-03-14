@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/add_employee_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/all_employees_table.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/current_project_employees_table.dart';
@@ -8,7 +10,9 @@ class Empleados extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return BlocBuilder<EmployeInitCubit, EmployeInitState>(
+      builder: (context, state) {
+        return Column(
       children: [
         const CurrentProjectEmployeesTable(),
         const SizedBox(height: 20),
@@ -44,6 +48,8 @@ class Empleados extends StatelessWidget {
           ),
         )
       ],
+    );
+      },
     );
   }
 }

@@ -44,29 +44,30 @@ class ProjectCard extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
+                          Future<ProjectDto> updatedProject =
+                              ProjectService.updateCurrentProject(
+                                  serverIp, project.projectId!);
                           if (project.projectIsCurrent) {
-                            Future<ProjectDto> updatedProject =
-                                ProjectService.updateProjectState(
-                                    serverIp, project.projectId!);
-                            updatedProject.then((value) =>
-                                BlocProvider.of<ProjectCubit>(context)
-                                    .addProject(value));
-                          } else {
-                            Future<ProjectDto> updatedProject =
-                                ProjectService.updateCurrentProject(
-                                    serverIp, project.projectId!);
                             updatedProject.then((value) {
                               BlocProvider.of<ProjectCubit>(context)
-                                  .deleteProject(project.projectId!);
-                              ProjectDto currentProject =
-                                  BlocProvider.of<ProjectCubit>(context)
-                                      .state
-                                      .currentProject!;
-                              currentProject.projectIsCurrent = false;
-                              if (currentProject.projectId != null) {
+                                  .setCurrentProject(null);
+                              BlocProvider.of<ProjectCubit>(context)
+                                  .addProject(value);
+                            });
+                          } else {
+                            ProjectDto? currentProject =
                                 BlocProvider.of<ProjectCubit>(context)
-                                    .addProject(currentProject);
-                              }
+                                    .state
+                                    .currentProject;
+                            if (currentProject != null) {
+                              currentProject.projectIsCurrent = false;
+                              BlocProvider.of<ProjectCubit>(context)
+                                  .addProject(currentProject);
+                            }
+                            updatedProject.then((value) {
+                              BlocProvider.of<ProjectCubit>(context)
+                                  .deleteProject(value.projectId!);
+
                               BlocProvider.of<ProjectCubit>(context)
                                   .setCurrentProject(value);
                             });

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
+import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/employee_entity.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
 
@@ -48,11 +49,11 @@ class AddEmployeeForm extends StatelessWidget {
                 var serverIp =
                     BlocProvider.of<ApplicationCubit>(context).state.serverIp;
 
-                Future<bool> isRegistered = EmployeServices.postEmploye(
+                Future<EmployeeDto> savedEmployee = EmployeServices.postEmploye(
                     serverIp, EmployeeEntity(ci: ci, name: name));
 
-                isRegistered.then((value) {
-                  if (value) {
+                savedEmployee.then((value) {
+                  BlocProvider.of<EmployeInitCubit>(context).addAllEmploye(value);
                     ElegantNotification(
                       width: 350,
                       icon: const Icon(
@@ -77,12 +78,6 @@ class AddEmployeeForm extends StatelessWidget {
                     var actualizedEmployees = EmployeServices.getEmployesNotAssignedToCurrentProject(serverIp);
                     BlocProvider.of<EmployeInitCubit>(context).initAllEmployeesList(actualizedEmployees);
                     Navigator.of(context).pop();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Error al agregar empleado')),
-                    );
-                  }
                 });
 
                 _nameController.clear();

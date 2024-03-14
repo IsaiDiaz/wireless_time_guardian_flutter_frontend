@@ -4,7 +4,6 @@ import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/edit_employee_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/employee_devices.dart';
-import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/employe_services.dart';
 
 class AllEmployeesTable extends StatelessWidget {
@@ -13,10 +12,6 @@ class AllEmployeesTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var serverIp = BlocProvider.of<ApplicationCubit>(context).state.serverIp;
-    Future<List<EmployeeDto>> allEmployees =
-        EmployeServices.getEmployesNotAssignedToCurrentProject(serverIp);
-    BlocProvider.of<EmployeInitCubit>(context)
-        .initAllEmployeesList(allEmployees);
 
     return BlocBuilder<EmployeInitCubit, EmployeInitState>(
       builder: (context, state) {
@@ -90,7 +85,7 @@ class AllEmployeesTable extends StatelessWidget {
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: Text('No hay empleados'),
           );
         }
       },
