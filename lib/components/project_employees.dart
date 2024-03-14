@@ -19,11 +19,10 @@ class ProjectEmployees extends StatelessWidget {
     return Column(
       children: [
         const Text('Empleados'),
-        if (employees == null)
-        const Text('No hay empleados asignados a este proyecto'),
-        employees!.isEmpty
-            ? const Text('No hay empleados asignados a este proyecto')
-            : ListView.builder(
+        if(employees == null || employees.isEmpty)
+          const Text('No hay empleados asignados a este proyecto')
+        else
+          ListView.builder(
                 shrinkWrap: true,
                 itemCount: employees.length,
                 itemBuilder: (BuildContext context, int index) {
