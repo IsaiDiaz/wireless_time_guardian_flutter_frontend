@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wireless_time_guardian_flutter_frontend/bloc/employe_init_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/general_application_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/bloc/project_cubit.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/add_employee_to_project_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/edit_project_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/finalize_project_form.dart';
 import 'package:wireless_time_guardian_flutter_frontend/components/project_employees.dart';
+import 'package:wireless_time_guardian_flutter_frontend/dto/employee_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/dto/project_dto.dart';
 import 'package:wireless_time_guardian_flutter_frontend/services/project_service.dart';
 
@@ -53,6 +55,8 @@ class ProjectCard extends StatelessWidget {
                                   .setCurrentProject(null);
                               BlocProvider.of<ProjectCubit>(context)
                                   .addProject(value);
+                              BlocProvider.of<EmployeInitCubit>(context)
+                                  .setCurrentProjectEmployees([]);
                             });
                           } else {
                             ProjectDto? currentProject =
@@ -70,6 +74,17 @@ class ProjectCard extends StatelessWidget {
 
                               BlocProvider.of<ProjectCubit>(context)
                                   .setCurrentProject(value);
+                              
+                              List<EmployeeDto>? currentProjectEmployees =
+                                  BlocProvider.of<ProjectCubit>(context)
+                                      .getProjectEmployees(value.projectId!);
+
+                              if (currentProjectEmployees != null) {
+                                BlocProvider.of<EmployeInitCubit>(context)
+                                    .setCurrentProjectEmployees(
+                                        currentProjectEmployees);
+                              }
+
                             });
                           }
                           Navigator.of(context).pop();

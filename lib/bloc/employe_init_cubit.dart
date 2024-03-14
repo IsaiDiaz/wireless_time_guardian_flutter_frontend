@@ -73,6 +73,10 @@ class EmployeInitCubit extends Cubit<EmployeInitState> {
         });
   }
 
+  void setCurrentProjectEmployees(List<EmployeeDto> employees) {
+    emit(EmployeInitState(employees, state.allEmployees));
+  }
+
   void initAllEmployeesList(Future<List<EmployeeDto>?> allEmployees) {
     allEmployees.then((value) 
         {
